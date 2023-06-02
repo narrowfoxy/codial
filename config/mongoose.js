@@ -8,6 +8,8 @@ async function main() {
     await mongoose.connect(process.env.MONGO_URI);
     console.log(chalk.yellowBright("Successfully connected to the Database"));
   } catch (err) {
-    console.log(chalk.redBright("Error while connecting to Database"));
+    console.log(chalk.redBright("Error while connecting to Database", err));
   }
 }
+
+module.exports = mongoose.connection;

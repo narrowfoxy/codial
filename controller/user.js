@@ -22,4 +22,24 @@ const register = async (req, res) => {
   res.redirect("back");
 };
 
-module.exports = { signin, signup, profile, register };
+const createSession = (req, res) => {
+  res.redirect("/");
+};
+
+const destroySession = (req, res) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    return res.redirect("/");
+  });
+};
+
+module.exports = {
+  signin,
+  signup,
+  profile,
+  register,
+  createSession,
+  destroySession,
+};
