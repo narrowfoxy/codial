@@ -1,4 +1,18 @@
-body {
-  background-color: bisque;
-  color: green;
+.header {
+  padding: 4px;
+  background-color: #FDD835;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-link {
+  display: flex;
+  list-style: none;
+
+  li {
+    margin: 0px 12px;
+  }
+
 }

@@ -1,15 +1,23 @@
 <link rel="stylesheet" href="/css/header.css" />
-<div>
-  <ul>
+<div class="header">
+  <div>
+    <img
+      width="50"
+      height="50"
+      src="https://img.icons8.com/stickers/100/group-task.png"
+      alt="group-task"
+    />
+  </div>
+  <ul class="user-link">
     <% if(locals.user){ %>
     <li>
-      <a href="/user/destroy-session">logout</a>
+      <a href="/user/destro>y-session">logout</a>
     </li>
     <%} else { %>
     <li>
       <a href="/user/signin"> signin </a>
     </li>
-    <li><a href="/user/signup">signout</a></li>
+    <li><a href="/user/signup">signup</a></li>
     <% } %>
   </ul>
 </div>
