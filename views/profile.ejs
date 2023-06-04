@@ -1,1 +1,13 @@
-profile
+<div>
+  <%if(customUser.id == user.id){%>
+  <form method="post" action="/user/update-profile">
+    <div>
+      <label for="name">Name</label>
+      <input id="name" name="name" type="text" />
+      <button type="submit">Update Profile</button>
+    </div>
+  </form>
+  <%}%>
+  <div><%=customUser.name%></div>
+  <div><%=customUser.email%></div>
+</div>

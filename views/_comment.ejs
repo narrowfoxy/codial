@@ -1,0 +1,8 @@
+<div>
+  <%if(comment.user.id == user.id){%><a
+    href="/user/destroy-comment/<%=comment._id%>"
+    >X</a
+  ><%}%>
+  <div><%=comment.content%></div>
+  <div><%=comment.user.name%></div>
+</div>

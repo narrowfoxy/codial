@@ -12,6 +12,8 @@ const MongoStore = require("connect-mongo")(session);
 const sassMiddleware = require("node-sass-middleware");
 const { compileSass, compileAllSassFiles } = require("./utils/node-sass");
 const chokidar = require('chokidar');
+const connectFlash = require("connect-flash");
+const customMware = require("./config/middleware");
 
 const PORT = process.env.PORT || 8000;
 const app = express();
@@ -45,6 +47,8 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(passport.setAuthenticatedUser);
+app.use(connectFlash());
+app.use(customMware.setFlash)
 
 app.use(expressLayouts);
 app.use(express.static("assets"));

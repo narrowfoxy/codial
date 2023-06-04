@@ -1,0 +1,6 @@
+<div>
+  <h2>Friends</h2>
+  <% for(user of users){ %>
+  <p><a href="/user/profile/<%=user.id%>"><%=user.name %></a></p>
+  <% } %>
+</div>

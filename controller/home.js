@@ -1,4 +1,5 @@
 const Post = require("../models/Post");
+const User = require("../models/User");
 
 const home = async (req, res) => {
   try {
@@ -9,7 +10,10 @@ const home = async (req, res) => {
         populate: { path: "user" },
       })
       .exec();
-    return res.render("home", { posts });
+    
+    const users = await User.find({});
+
+    return res.render("home", { posts, users });
   } catch (err) {
     console.log("Error while fetching the Posts", err);
     return res.render("home");

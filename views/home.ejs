@@ -1,34 +1,13 @@
 <div>
   <div>
-    <a href="/user/profile">Profile</a>
-  </div>
-  <div>
-    <h2>Create Post</h2>
     <% if(locals.user) { %>
+    <h2>Create Post</h2>
     <form action="/user/create-post" method="post">
       <textarea name="post_content" cols="40" rows="10"></textarea>
       <button type="submit">Add Post</button>
     </form>
-    <% for(let post of locals.posts) { %> 
-      <p>
-        <h3><%= post.content%></h3>
-        <h4><%= post.user.name%></h4>
-        <div>
-          <form action="/user/create-comment" method="post">
-            <textarea name="post_comment" cols="10" rows="1"></textarea>
-            <input name="post_id" value="<%=post._id%>" hidden />
-            <button type="submit">Add Comment</button>
-          </form>
-          <div><%for(let comment of post.comment) {%>
-              <div>
-                <div><%=comment.content%></div>
-                <div><%=comment.user.name%></div>
-              </div>
-            <%}%>
-          </div>
-        </div>
-      </p>
-      <% } %>
-    <% } %>
+    <% for(let post of locals.posts) { %> <%- include('_post.ejs', { post: post
+    }) %> <% } %> <% } %> <% if(locals.user) { %><%- include('_friends', {
+    users: users }) %><% }%>
   </div>
 </div>

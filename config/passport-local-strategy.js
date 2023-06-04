@@ -8,18 +8,18 @@ passport.use(
   new LocalStretegy(
     {
       usernameField: "email",
+      passReqToCallback: true,
     },
-    async function (email, password, done) {
+    async function (req, email, password, done) {
       try {
         const userData = await User.findOne({ email: email });
         if (!userData || userData.password != password) {
-          console.log("invalid username password");
+          req.flash("error", "Error in auth");
           return done(null, false);
         }
-
         return done(null, userData);
       } catch (err) {
-        console.log("error in finding user ==> passport");
+        req.flash("error", "error in finding user ==> passport");
         return done(err);
       }
     }

@@ -20,5 +20,22 @@ router.post(
   passport.checkAuthentication,
   userController.createComment
 );
+router.get(
+  "/destroy-post/:id",
+  passport.checkAuthentication,
+  userController.deletePost
+);
+
+router.get(
+  "/destroy-comment/:id",
+  passport.checkAuthentication,
+  userController.deleteComment
+);
+
+router.post(
+  "/update-profile",
+  passport.checkAuthentication,
+  userController.updateProfile
+);
 
 module.exports = router;
