@@ -10,10 +10,9 @@ const home = async (req, res) => {
         populate: { path: "user" },
       })
       .exec();
-    
-    const users = await User.find({});
 
-    return res.render("home", { posts, users });
+    const users = await User.find({});
+    return res.render("home", { posts: posts || [], users });
   } catch (err) {
     console.log("Error while fetching the Posts", err);
     return res.render("home");

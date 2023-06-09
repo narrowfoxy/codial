@@ -1,5 +1,7 @@
-<div>
+<div id="comment-container-<%=comment._id%>">
   <%if(comment.user.id == user.id){%><a
+    id="<%=comment._id%>"
+    class="delete-comments"
     href="/user/destroy-comment/<%=comment._id%>"
     >X</a
   ><%}%>

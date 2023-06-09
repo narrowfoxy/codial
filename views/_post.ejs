@@ -1,16 +1,19 @@
+
 <p>
-  <% if(post.user.id == user.id){ %> <a href="/user/destroy-post/<%=post._id%>">X</a> <% } %>
+  <div id="post-container-<%=post._id%>">
+  <% if(post.user.id == user.id){ %> <a id="<%=post._id%>" href="/user/destroy-post/<%=post._id%>">X</a> <% } %>
   <h3><%= post.content%></h3>
   <h4><%= post.user.name%></h4>
   <div>
-    <form action="/user/create-comment" method="post">
+    <form id="comment-form-<%=post._id%>" class="create-comment" action="/user/create-comment" method="post">
       <textarea name="post_comment" cols="10" rows="1"></textarea>
       <input name="post_id" value="<%=post._id%>" hidden />
       <button type="submit">Add Comment</button>
     </form>
-    <div><%for(let comment of post.comment) {%>
+    <div id="comment-container-<%=post._id%>" ><%for(let comment of post.comment) {%>
         <%- include('_comment.ejs', { comment: comment }) %>
       <%}%>
     </div>
   </div>
+</div>
 </p>

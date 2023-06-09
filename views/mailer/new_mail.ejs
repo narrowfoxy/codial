@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>New Comment Notification</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f7f7f7;
+        border: 1px solid #ddd;
+      }
+      h2 {
+        color: #333;
+        margin-top: 0;
+      }
+      p {
+        margin-bottom: 20px;
+      }
+      .comment {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+      .comment strong {
+        color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>New Comment on the Post</h2>
+      <p>Hello <%= user.name %>,</p>
+      <p>
+        A new comment has been posted on your blog post. Here are the details:
+      </p>
+
+      <div class="comment">
+        <p><strong>Name:</strong> <%= comment.user.name %></p>
+        <p><strong>Email:</strong> <%= comment.user.email %></p>
+        <p><strong>Comment:</strong> <%= comment.content %></p>
+      </div>
+
+      <p>Thank you for your attention.</p>
+      <p>Best regards,</p>
+      <p>Your Blog Team</p>
+    </div>
+  </body>
+</html>

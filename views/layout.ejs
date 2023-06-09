@@ -9,21 +9,42 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/noty@3.1.0/lib/noty.css"
     />
+    <%- style %>
     <title>Document</title>
   </head>
   <body>
     <%- include('_header') %> <%- body %> <%- include('_footer') %>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+      integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
     <script src="https://cdn.jsdelivr.net/npm/noty@3.1.0/lib/noty.min.js"></script>
     <script>
+      "<%=flash.success%>";
+    </script>
+    <script>
+      const flashSignIn = "<%=flash.signin%>"
+      const flashSignOut =  "<%=flash.signout%>"
       <%if(flash.success && flash.success.length){%>
-          new Noty({
+          if(!(localStorage.getItem('signin') && flashSignIn)){
+            new Noty({
               theme: 'relax',
               text: '<%=flash.success%>',
               type: 'success',
               layout: 'topRight',
               timeout: 1500
-          }).show();
+          }).show(); 
+          }
+          if(flashSignIn && !localStorage.getItem('signin')) {
+            localStorage.setItem('signin', true)
+          } 
+          if(flashSignOut){
+            localStorage.removeItem('signin')
+          }
       <%}%>
     </script>
+    <%- script %>
   </body>
 </html>

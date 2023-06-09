@@ -7,11 +7,13 @@ const path = require("path");
 const expressLayouts = require("express-ejs-layouts");
 const passport = require("passport");
 const passportLocal = require("./config/passport-local-strategy");
+const passportJwt = require("./config/passport-jwt-strategy");
+const passportGoogle = require("./config/passport-google-strategy");
 const cookieParser = require("cookie-parser");
 const MongoStore = require("connect-mongo")(session);
 const sassMiddleware = require("node-sass-middleware");
 const { compileSass, compileAllSassFiles } = require("./utils/node-sass");
-const chokidar = require('chokidar');
+const chokidar = require("chokidar");
 const connectFlash = require("connect-flash");
 const customMware = require("./config/middleware");
 
@@ -19,6 +21,7 @@ const PORT = process.env.PORT || 8000;
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 app.use(cookieParser());
 app.use(
   session({
@@ -43,15 +46,17 @@ app.use(
     ),
   })
 );
-
+console.log('initialize')
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(passport.setAuthenticatedUser);
 app.use(connectFlash());
-app.use(customMware.setFlash)
+app.use(customMware.setFlash);
 
 app.use(expressLayouts);
 app.use(express.static("assets"));
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+app.use("/assets", express.static(path.join(__dirname, "/assets")));
 app.set("layout extractScripts", true);
 app.set("layout extractStyles", true);
 app.set("view engine", "ejs");
@@ -59,7 +64,7 @@ app.set("views", path.join(__dirname, "views"));
 
 const node_sass = compileAllSassFiles();
 
-chokidar.watch("./assets/scss").on('change', (filePath) => {
+chokidar.watch("./assets/scss").on("change", (filePath) => {
   console.log(`Sass file ${filePath} changed. Recompiling...`);
   compileSass(filePath);
 });

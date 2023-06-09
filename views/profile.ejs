@@ -1,13 +1,16 @@
+<script src="/js/profile.js"></script>
 <div>
   <%if(customUser.id == user.id){%>
-  <form method="post" action="/user/update-profile">
+  <form id="update-profile" method="post" enctype="multipart/form-data" action="/user/update-profile">
     <div>
-      <label for="name">Name</label>
-      <input id="name" name="name" type="text" />
+      <label for="profile">Name</label>
+      <input id="profile" name="name" type="text" />
+      <input name="avatar" id="user-photo" type="file" placeholder="your profile image" />
       <button type="submit">Update Profile</button>
     </div>
   </form>
   <%}%>
-  <div><%=customUser.name%></div>
+  <div id="profile-image-container"><img id="profile-image" height="100px" width="100px" src="<%=customUser.avatar%>" alt="<%=customUser.name%>" /></div>
+  <div id="profile-name"><%=customUser.name%></div>
   <div><%=customUser.email%></div>
 </div>
