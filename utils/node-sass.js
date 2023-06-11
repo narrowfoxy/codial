@@ -1,6 +1,7 @@
 const sass = require("node-sass");
 const fs = require("fs");
 const path = require("path");
+const env = require("../config/environment-managaer");
 
 function compileSass(sassFile) {
   const cssFile = path.join(
@@ -28,7 +29,7 @@ function compileSass(sassFile) {
   );
 }
 
-const sassFolder = "./assets/scss";
+const sassFolder = env.SASS_FILE_PATH;
 
 // Function to compile all Sass files in the folder
 function compileAllSassFiles() {

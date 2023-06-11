@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 const multer = require("multer");
 const path = require("path");
+const env = require("../config/environment-managaer");
 
-const AVATAR_PATH = path.join("/uploads/users/avatars");
+const AVATAR_PATH = path.join(env.AVATAR_PATH);
 
 const userSchema = new mongoose.Schema(
   {
@@ -21,8 +22,26 @@ const userSchema = new mongoose.Schema(
     },
     avatar: {
       type: String,
-      default: "/assets/images/avatar.png",
+      default: env.DEFAULT_AVATAR_PATH,
     },
+    friends: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Friend",
+      },
+    ],
+    receivedPendingFriends: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Friend",
+      },
+    ],
+    sendPendingFriends: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Friend",
+      },
+    ],
   },
   { timestamps: true }
 );

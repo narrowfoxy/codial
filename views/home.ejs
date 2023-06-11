@@ -1,5 +1,18 @@
-<script src="/js/user.js"></script>
-<script src="/js/comment.js"></script>
+<script src="<%=manifest("js/user.js")%>"></script>
+<script src="<%=manifest("js/comment.js")%>"></script>
+<% if(locals.user) { %>
+<script>
+  var socket = io("http://localhost:3000");
+  var email = "<%=locals.user.email%>";
+  socket.on("connection_done", function (args) {
+    socket.emit("join", { email: email });
+  });
+  socket.on("friendRequest", function (args, callback) {
+    console.log(args.message);
+    socket.emit("requestShown", { friendId: args.friendId });
+  });
+</script>
+<%}%>
 <div>
   <div>
     <% if(locals.user) { %>

@@ -1,11 +1,116 @@
 const User = require("../models/User");
 const Post = require("../models/Post");
+const Like = require("../models/Likes");
 const Comment = require("../models/Comment");
 const commentMailer = require("../mailers/comments_mail");
 const kue = require("../config/kue");
+const Friend = require("../models/Friend");
+const io = require("../config/socket");
 
 const profile = (req, res) => {
   res.render("profile");
+};
+
+const friendRequest = async (req, res) => {
+  const { to, from } = req.body;
+  const friend = await Friend.create({
+    to: to,
+    from: from,
+  });
+
+  const fromUser = await User.findById(from);
+  const toUser = await User.findById(to);
+  fromUser.sendPendingFriends.push(friend);
+  await fromUser.save();
+  toUser.receivedPendingFriends.push(friend);
+  await toUser.save();
+  console.log("friend Request Received");
+  io.sockets
+    .in(toUser.email)
+    .timeout(5000)
+    .emit("friendRequest", {
+      message: `you recieved a new friend request from ${fromUser.name}`,
+      friendId: friend.id,
+    });
+  return res.json(friend);
+};
+
+const acceptRequest = async (req, res) => {
+  const { to, from, friendId } = req.body;
+  const friend = await Friend.findByIdAndUpdate(friendId, {
+    accepted: true,
+  });
+  console.log(friend);
+  const fromUser = await User.findByIdAndUpdate(from, {
+    $pull: { sendPendingFriends: friendId },
+  });
+  const toUser = await User.findByIdAndUpdate(to, {
+    $pull: { receivedPendingFriends: friendId },
+  });
+  const updateFromUser = await User.findById(from);
+  const updateToUser = await User.findById(to);
+  updateFromUser.friends.push(friendId);
+  updateToUser.friends.push(friendId);
+  await updateFromUser.save();
+  await updateToUser.save();
+
+  return res.json({ success: "Added Friend" });
+};
+
+const like = async (req, res) => {
+  const { onModelType, modelId } = req.params;
+
+  switch (onModelType) {
+    case "Comment": {
+      const existingLike = await Like.findOne({
+        user: req.user.id,
+        onModel: onModelType,
+        likeable: modelId,
+      });
+      if (existingLike) {
+        await Like.findByIdAndRemove(existingLike.id);
+        await Comment.findByIdAndUpdate(existingLike.likeable, {
+          $pull: { likes: existingLike.id },
+        });
+        return res.json(existingLike);
+      } else {
+        const newLike = await Like.create({
+          user: req.user.id,
+          onModel: onModelType,
+          likeable: modelId,
+        });
+        console.log(newLike);
+        const comment = await Comment.findById(modelId);
+        comment.likes.push(newLike);
+        await comment.save();
+        return res.json(newLike);
+      }
+    }
+    case "Post": {
+      const existingLike = await Like.findOne({
+        user: req.user.id,
+        onModel: onModelType,
+        likeable: modelId,
+      });
+      if (existingLike) {
+        await Like.findByIdAndRemove(existingLike.id);
+        await Post.findByIdAndUpdate(existingLike.likeable, {
+          $pull: { likes: existingLike.id },
+        });
+        return res.json(existingLike);
+      } else {
+        const newLike = await Like.create({
+          user: req.user.id,
+          onModel: onModelType,
+          likeable: modelId,
+        });
+        const post = await Post.findById(modelId);
+        post.likes.push(newLike);
+        await post.save();
+        return res.json(newLike);
+      }
+    }
+  }
 };
 
 const customProfile = async (req, res) => {
@@ -159,13 +264,11 @@ const deleteComment = async (req, res) => {
         $pull: { comment: comment_id },
       });
     }
-    res.status(200).json({ success: "Deleted comment successfully" });
+    return res.status(200).json({ success: "Deleted comment successfully" });
   } catch (err) {
-    console.log("Error while deleting comment");
-    req.flash("error", "Failed deleting comment");
+    console.log(err, "Error while deleting comment");
+    return req.flash("error", "Failed deleting comment");
   }
-
-  return res.redirect("back");
 };
 
 const updateProfile = async (req, res) => {
@@ -214,4 +317,7 @@ module.exports = {
   deleteComment,
   customProfile,
   updateProfile,
+  like,
+  friendRequest,
+  acceptRequest,
 };

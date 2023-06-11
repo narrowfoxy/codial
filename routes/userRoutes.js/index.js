@@ -39,6 +39,15 @@ router.post(
 );
 
 router.get(
+  "/like/:modelId/:onModelType",
+  passport.checkAuthentication,
+  userController.like
+);
+
+router.post("/friend-request", userController.friendRequest);
+router.post("/friend-request-accept", userController.acceptRequest);
+
+router.get(
   "/auth/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
 );

@@ -1,9 +1,10 @@
 const nodemailer = require("../config/nodemailer");
+const env = require("../config/environment-managaer");
 
 module.exports.newMail = (user, comment) => {
   nodemailer.transporter.sendMail(
     {
-      from: "codial app",
+      from: env.APP_NAME,
       to: comment.user.email,
       subject: "New Comment is Added",
       html: nodemailer.renderTemplate({ comment: comment, user: user }, "new_mail.ejs"),

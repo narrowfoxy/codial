@@ -1,4 +1,4 @@
-<script src="/js/profile.js"></script>
+<script src="<%=manifest("js/profile.js")%>"></script>
 <div>
   <%if(customUser.id == user.id){%>
   <form id="update-profile" method="post" enctype="multipart/form-data" action="/user/update-profile">

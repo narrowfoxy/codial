@@ -1,0 +1,1 @@
+var socket=io("http://localhost:3000"),user=document.getElementById("socket");const juser=$("#socket");socket.on("connection_done",function(e){socket.emit("join",{email:user.email})});
